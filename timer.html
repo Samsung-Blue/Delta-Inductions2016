@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<head>
+  <title>Countdown Timer</title>
+  <!-- CSS styling -->
+  <style>
+     .input{
+      height: 50px;
+      width: 200px;
+      margin-left: 50px;
+     }
+     .buttons{
+     	height: 40px;
+     	width: 70px;
+     	background-color: pink;
+     	margin-left: 50px;
+     	margin-top: 20px;
+     	padding-top: 10px;
+     	padding-left: 10px;
+      border-radius: 5px;
+     	font-size: 18px;
+     	cursor: pointer;
+     	display: inline-block;
+     }
+     .timer{
+     	height: 40px;
+     	width: 40px;
+     	border-radius: 5px;
+     	border: 2px solid black;
+     	display: inline-block;
+     	margin-left: 30px;
+     	margin-top: 50px;
+     	color: black;
+     	font-size: 20px;
+      padding-left: 10px;
+      padding-top: 10px;
+     }
+  </style>
+</head>
+<body>
+  <h1 style="font-family: Monotype Corsiva; color: black; text-align: center;">Countdown Timer</h1>
+  <input type="text" id="days" class="input" name="days" placeholder="days">
+  <input type="text" id="hours" class="input" name="hours" placeholder="hours">
+  <input type="text" id="min" class="input" name="min" placeholder="minutes">
+  <input type="text" id="sec" class="input" name="sec" placeholder="seconds">
+  <br>
+  <div id="start" class="buttons" onclick="start();setCountdown();">Start</div>
+  <div id="stop" class="buttons" onclick="stop();">Stop</div>
+  <div id="reset" class="buttons" onclick="reset();">Reset</div>
+  <br>
+  <div class="timer" style="margin-left: 400px;" id="tdays"></div>
+  <div class="timer" id="thours"></div>
+  <div class="timer" id="tmin"></div>
+  <div class="timer" id="tsec"></div>
+  <script>
+    // To remove the input values on reloading 
+    localStorage.setItem("count","0");
+    document.getElementById("days").value = localStorage.getItem("d");
+    document.getElementById("hours").value = localStorage.getItem("d");
+    document.getElementById("min").value = localStorage.getItem("d");
+    document.getElementById("sec").value = localStorage.getItem("d");
+
+    var day,hour,min,sec,timer;
+    var count=1;
+    var counter=1;
+    var tdays = document.getElementById("tdays");
+    var thours =document.getElementById("thours");
+    var tmin=document.getElementById("tmin");
+    var tsec=document.getElementById("tsec");
+    function start(){
+      // To convert to a 24 hour clock
+      if(count==1)
+        {
+          day= parseInt(document.getElementById("days").value);
+          hour = parseInt(document.getElementById("hours").value);
+          min = parseInt(document.getElementById("min").value);
+          sec =  parseInt(document.getElementById("sec").value);
+          count++;
+        }
+    	if((sec/60)>=1)
+    	{ 
+    		min= min + Math.floor((sec/60));
+    		sec=Math.floor(sec%60);
+       	}
+       	if((min/60)>1)
+       	{
+       		hour= hour+ Math.floor(min/60);
+       		min=Math.floor(min%60);
+       	}
+       	if((hour/24)>1)
+       	{
+       		day=day+Math.floor(hour/24);
+       		hour=Math.floor(hour%24);
+       	}
+       	if(sec==0&&min!=0)
+       	{
+       		min=min-1;
+       		sec=59;
+       	}
+       	if((min==0&&sec==0)&&(hour!=0))
+       	{
+       		hour=hour-1;
+       		min=59;
+       		sec=59;
+       	}
+       	if((hour==0&&min==0&&sec==0)&&(day!=0))
+       	{
+       		day=day-1;
+       		hour=23;
+       		min=59;
+       		sec=59;
+       	}
+        if(day==0&&hour==0&&min==0&&sec==0)
+        {
+          alert("Time up !!");
+          clearInterval(timer);
+        }
+        tdays.innerHTML= day;
+        thours.innerHTML= hour;
+        tmin.innerHTML= min;
+        tsec.innerHTML= sec;
+       	sec=sec-1;
+    }
+
+    // Calls function start every 1 second 
+    function setCountdown(){
+      if(counter==1)
+      {
+      timer = setInterval(start,1000);
+      counter++;
+      }
+    }
+    // To stop the timer 
+    function stop(){
+    	clearInterval(timer);
+      counter=1;
+    }
+    // To reset the timer 
+    function reset(){
+      day = parseInt(document.getElementById("days").value);
+      hour = parseInt(document.getElementById("hours").value);
+      min = parseInt(document.getElementById("min").value);
+      sec =  parseInt(document.getElementById("sec").value);     
+      tdays.innerHTML= day;
+      thours.innerHTML= hour;
+      tmin.innerHTML= min;
+      tsec.innerHTML= sec;
+    }
+  </script>
+</body>
+</html>
